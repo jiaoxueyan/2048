@@ -1,7 +1,12 @@
 let board = new Array();
+// 获取屏幕宽度
+let clientWidth = document.documentElement.clientWidth - 16 // 屏幕宽度
+let width = clientWidth*0.2 // 每一个方块宽度
+console.log(document.documentElement.clientWidth)
 // console.log(board)
 
 $(document).ready(function() {
+  
   newgame();
   $("#left").click(function(){
     if(moveLeft()) {
@@ -38,6 +43,20 @@ $(document).ready(function() {
       }, 200)
       // isGameOver()
     }
+  })
+  
+  $(".container").css({
+    width: clientWidth,
+    height: clientWidth,
+  })
+  $(".container .cell").css({
+    width: width,
+    height: width,
+  })
+  $(".container .numbercell").css({
+    width: width,
+    height: width,
+    lineHeight: width + 'px'
   })
 })
 
@@ -78,8 +97,9 @@ function boardUpdateView() {
         })
       } else {
         theNumberCell.css({
-          width: '100px',
-          height: '100px',
+          width: width,
+          height: width,
+          lineHeight: width + 'px',
           top:  getPositionTop(i),
           left:  getPositionLeft(j),
           background: getNumberBackgroundColor(board[i][j]),
@@ -108,8 +128,8 @@ function newRandorNumber() {
   numberCellElement.text(randomNum)
   numberCellElement.css({ background: getNumberBackgroundColor(randomNum) })
   numberCellElement.animate({ // 显示随机生成的数字位置的numbercell
-    width: '100px',
-    height: '100px',
+    width: width,
+    height: width,
     top:  getPositionTop(randomLocation[0]),
     left: getPositionLeft(randomLocation[1]),
   })
@@ -306,4 +326,28 @@ function moveUp() {
   }
   return true
 }
-
+// 获取定位的top值和left值
+function getPositionTop(i) {
+  return `${width/5 + i * (width+(width/5))}px`
+}
+function getPositionLeft(j) {
+  return `${width/5 + j * (width+(width/5))}px`
+}
+// 根据数字值获取背景色
+function getNumberBackgroundColor(number) {
+  switch(number) {
+    case 2: return '#eee4da';break;
+    case 4: return '#ede0c8';break;
+    case 8: return '#f2b179';break;
+    case 16: return '#f59563';break;
+    case 32: return '#f67c5f';break;
+    case 64: return '#f65e3b';break;
+    case 128: return '#edcf72';break;
+    case 256: return '#edcc61';break;
+    case 512: return '#9c0';break;
+    case 1024: return '#33b5e5';break;
+    case 2048: return '#09c';break;
+    case 4096: return '#a6c';break;
+    case 8192: return '#93c';break;
+  }
+}
