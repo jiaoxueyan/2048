@@ -1,12 +1,19 @@
 let board = new Array();
 // 获取屏幕宽度
-let clientWidth = document.documentElement.clientWidth - 16 // 屏幕宽度
+let clientWidth = document.documentElement.clientWidth - 16 > 500 ? 500 : document.documentElement.clientWidth - 16 // 屏幕宽度
 let width = clientWidth*0.2 // 每一个方块宽度
-console.log(document.documentElement.clientWidth)
+console.log(document.documentElement.clientWidth - 16 > 500)
 // console.log(board)
 
 $(document).ready(function() {
-  
+  $(".container").css({
+    width: clientWidth,
+    height: clientWidth,
+  })
+  $(".container .cell").css({
+    width: width,
+    height: width,
+  })
   newgame();
   $("#left").click(function(){
     if(moveLeft()) {
@@ -45,19 +52,12 @@ $(document).ready(function() {
     }
   })
   
-  $(".container").css({
-    width: clientWidth,
-    height: clientWidth,
-  })
-  $(".container .cell").css({
-    width: width,
-    height: width,
-  })
-  $(".container .numbercell").css({
-    width: width,
-    height: width,
-    lineHeight: width + 'px'
-  })
+  
+  // $(".container .numbercell").css({
+  //   width: width,
+  //   height: width,
+  //   lineHeight: width + 'px'
+  // })
 })
 
 function newgame() {
@@ -88,14 +88,16 @@ function boardUpdateView() {
     for(let j = 0; j < 4; j ++ ) {
       $(".container").append(`<div class="numbercell" id="numbercell-${i}-${j}"></div>`)
       let theNumberCell = $("#numbercell-" + i + "-" + j)
+      console.log(i,j,board[i][j])
       if(board[i][j] === 0) {
         theNumberCell.css({
           width: '0px',
           height: '0px',
-          top:  parseInt(getPositionTop(i)) + 50 + "px",
-          left:  parseInt(getPositionLeft(j)) + 50 + "px",
+          top:  parseInt(getPositionTop(i)) + width/2 + "px",
+          left:  parseInt(getPositionLeft(j)) + width/2 + "px",
         })
       } else {
+        console.log(i,j,board[i][j])
         theNumberCell.css({
           width: width,
           height: width,
@@ -103,11 +105,13 @@ function boardUpdateView() {
           top:  getPositionTop(i),
           left:  getPositionLeft(j),
           background: getNumberBackgroundColor(board[i][j]),
+          lineHeight: width + 'px'
         })
         theNumberCell.text(board[i][j])
       }
     }
   }
+  // debugger
 }
 // 从没有数字的cell里随机选一个位置并插入随机数字
 function newRandorNumber() {
@@ -132,6 +136,7 @@ function newRandorNumber() {
     height: width,
     top:  getPositionTop(randomLocation[0]),
     left: getPositionLeft(randomLocation[1]),
+    lineHeight: width + 'px'
   })
 }
 // 判断是否可以向左移动，1 有数字的位置左侧为空或与左侧数值相等
