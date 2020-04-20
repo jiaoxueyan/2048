@@ -1,0 +1,24 @@
+.container {
+  width: 500px;
+  height: 500px;
+  background: #bbada0;
+  border-radius: 10px;
+  margin: auto;
+  position: relative;
+}
+.container .cell {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc0b3;
+  border-radius: 6px;
+  position: absolute;
+}
+.container .numbercell {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  position: absolute;
+  line-height: 100px;
+  text-align: center;
+  font-size: 36px;
+}
