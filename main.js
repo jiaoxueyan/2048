@@ -2,8 +2,7 @@ let board = new Array();
 // 获取屏幕宽度
 let clientWidth = document.documentElement.clientWidth - 16 > 500 ? 500 : document.documentElement.clientWidth - 16 // 屏幕宽度
 let width = clientWidth*0.2 // 每一个方块宽度
-console.log(document.documentElement.clientWidth - 16 > 500)
-// console.log(board)
+let startX,startY,endX,endY
 
 $(document).ready(function() {
   $(".container").css({
@@ -51,15 +50,53 @@ $(document).ready(function() {
       // isGameOver()
     }
   })
-  
-  
-  // $(".container .numbercell").css({
-  //   width: width,
-  //   height: width,
-  //   lineHeight: width + 'px'
-  // })
+  $("body").on("touchstart",function(event){
+    startX = event.originalEvent.changedTouches[0].pageX
+    startY = event.originalEvent.changedTouches[0].pageY
+  })
+  $("body").on("touchend",function(event){
+    endX = event.originalEvent.changedTouches[0].pageX
+    endY = event.originalEvent.changedTouches[0].pageY
+    let x = endX - startX
+    let y = endY - startY
+    // console.log(Math.abs(x),Math.abs(y))
+    if(Math.abs(x) < 20 && Math.abs(y) < 20) { // 轻微滑动不算
+      return
+    }
+    if(Math.abs(x) > Math.abs(y)) { // 水平移动
+      if(x > 0) { // 右移
+        if(moveRight()) {
+          updateViewAndOneNumber()
+          // isGameOver()
+        }
+      } else { // 左移
+        if(moveLeft()) {
+          updateViewAndOneNumber()
+          // isGameOver()
+        }
+      }
+    } else { // 垂直移动
+      if(y > 0) { // 下移
+        if(moveDown()) {
+          updateViewAndOneNumber()
+          // isGameOver()
+        }
+      } else { // 上移
+        if(moveUp()) {
+          updateViewAndOneNumber()
+          // isGameOver()
+        }
+      }
+    }
+  })
 })
-
+// 移动完成后更新视图并生成一位新的随机数字
+function updateViewAndOneNumber() {
+  setTimeout(function() {
+    boardUpdateView()
+    newRandorNumber()
+  }, 200)
+}
 function newgame() {
   // 初始化棋盘格
   init()
@@ -88,7 +125,6 @@ function boardUpdateView() {
     for(let j = 0; j < 4; j ++ ) {
       $(".container").append(`<div class="numbercell" id="numbercell-${i}-${j}"></div>`)
       let theNumberCell = $("#numbercell-" + i + "-" + j)
-      console.log(i,j,board[i][j])
       if(board[i][j] === 0) {
         theNumberCell.css({
           width: '0px',
@@ -97,7 +133,6 @@ function boardUpdateView() {
           left:  parseInt(getPositionLeft(j)) + width/2 + "px",
         })
       } else {
-        console.log(i,j,board[i][j])
         theNumberCell.css({
           width: width,
           height: width,
@@ -207,7 +242,6 @@ function moveAnimate(i, j, newi, newj) {
 }
 function moveLeft() {
   // 判断是否可以向左移动
-  console.log(canMoveLeft())
   if(!canMoveLeft()) {
     return false
   }
@@ -215,17 +249,14 @@ function moveLeft() {
     for(let j=1;j<4;j++) {
       if(board[i][j] !== 0) { // 判断不为0的数字可不可以向左移动,左侧每一个位置都要判断
         for(let k=0;k<j;k++) {
-          console.log(k,board[i][k])
           if(board[i][k] === 0 && noBlockRow(i,j,k)) { // 落脚点为0
             // move
-            console.log(i,j,k)
             moveAnimate(i, j, i, k)
             board[i][k] = board[i][j]
             board[i][j] = 0
             break
           } else if(board[i][k] === board[i][j] && noBlockRow(i,j,k)) { // 落脚点与起始位置相等
             // move
-            console.log(i,j,k)
             moveAnimate(i, j, i, k)
             board[i][k] = board[i][k] + board[i][j]
             board[i][j] = 0
@@ -238,7 +269,6 @@ function moveLeft() {
   return true
 }
 function moveRight() {
-  console.log(canMoveRight())
   if(!canMoveRight()) {
     return false
   }
@@ -275,7 +305,6 @@ function noBlockCol(i, j, k) {
   return true
 }
 function moveDown() {
-  console.log(canMoveDown())
   if(!canMoveDown()) {
     return false
   }
@@ -304,7 +333,6 @@ function moveDown() {
 }
 
 function moveUp() {
-  console.log(canMoveUp())
   if(!canMoveUp()) {
     return false
   }
