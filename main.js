@@ -14,47 +14,16 @@ $(document).ready(function() {
     height: width,
   })
   newgame();
-  $("#left").click(function(){
-    if(moveLeft()) {
-      setTimeout(function() {
-        boardUpdateView()
-        newRandorNumber()
-      }, 200)
-      // isGameOver()
-    }
-  })
-  $("#right").click(function(){
-    if(moveRight()) {
-      setTimeout(function() {
-        boardUpdateView()
-        newRandorNumber()
-      }, 200)
-      // isGameOver()
-    }
-  })
-  $("#down").click(function(){
-    if(moveDown()) {
-      setTimeout(function() {
-        boardUpdateView()
-        newRandorNumber()
-      }, 200)
-      // isGameOver()
-    }
-  })
-  $("#up").click(function(){
-    if(moveUp()) {
-      setTimeout(function() {
-        boardUpdateView()
-        newRandorNumber()
-      }, 200)
-      // isGameOver()
-    }
+  $(document).on("touchmove", e => {
+    e.preventDefault()
   })
   $("body").on("touchstart",function(event){
+    event.preventDefault()
     startX = event.originalEvent.changedTouches[0].pageX
     startY = event.originalEvent.changedTouches[0].pageY
   })
   $("body").on("touchend",function(event){
+    event.preventDefault()
     endX = event.originalEvent.changedTouches[0].pageX
     endY = event.originalEvent.changedTouches[0].pageY
     let x = endX - startX

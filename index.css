@@ -1,3 +1,6 @@
+html,body {
+  height: 100%;
+}
 .container {
   background: #bbada0;
   border-radius: 10px;
